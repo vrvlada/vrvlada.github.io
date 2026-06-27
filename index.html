@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All2Pdf &amp; OCR Pro — Universal PDF Converter &amp; Dual OCR Scanner</title>
+    
+    <!-- SEO Optimization -->
+    <meta name="description" content="All2Pdf &amp; OCR Pro is the ultimate document converter and scanner app. Features dual local/cloud OCR engines, OpenCV-powered page dewarping, PDF merging, digital signing, and support for 100+ file formats.">
+    <meta name="keywords" content="document scanner, PDF converter, OCR text extraction, local OCR, cloud OCR, page dewarping, merge PDF, sign PDF, encrypt PDF, Tesseract OCR, Google Cloud Vision">
+    
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="All2Pdf &amp; OCR Pro — Universal PDF Converter &amp; Dual OCR Scanner">
+    <meta property="og:description" content="Convert 100+ file formats to PDF offline, scan with dual OCR engines, flatten curved pages, and cryptographically sign documents on your Android device.">
+    <meta property="og:type" content="website">
+    
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Theme Variables (Default Dark) */
+            --bg-color: #030712;
+            --surface-color: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.4);
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.3);
+            
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            
+            --grad-primary: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
+            --grad-surface: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+            --card-glow: rgba(79, 70, 229, 0.15);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            
+            --phone-bezel: #1f2937;
+            --phone-screen-bg: #0b0f19;
+        }
+
+        /* Light Theme overrides */
+        [data-theme="light"] {
+            --bg-color: #f8fafc;
+            --surface-color: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.08);
+            
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.2);
+            --accent: #0891b2;
+            --accent-glow: rgba(8, 145, 178, 0.15);
+            
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            
+            --grad-primary: linear-gradient(135deg, #4f46e5 0%, #0891b2 100%);
+            --grad-surface: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+            --card-glow: rgba(79, 70, 229, 0.05);
+            --glass-bg: rgba(0, 0, 0, 0.02);
+            
+            --phone-bezel: #e2e8f0;
+            --phone-screen-bg: #f8fafc;
+        }
+
+        /* Animated Starry Theme overrides */
+        [data-theme="starry"] {
+            --bg-color: #020617;
+            --surface-color: rgba(15, 23, 42, 0.65);
+            --border-color: rgba(255, 255, 255, 0.12);
+            
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.45);
+            --accent: #2dd4bf;
+            --accent-glow: rgba(45, 212, 191, 0.35);
+            
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            --grad-primary: linear-gradient(135deg, #6366f1 0%, #2dd4bf 100%);
+            --grad-surface: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            --card-glow: rgba(45, 212, 191, 0.2);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            
+            --phone-bezel: #334155;
+            --phone-screen-bg: #090d1f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Starry Background Animation */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            display: none;
+        }
+
+        [data-theme="starry"] .stars-container {
+            display: block;
+        }
+
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        /* Gradient Glowing Background Elements */
+        .bg-glows {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .glow-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            transition: all 0.8s ease;
+        }
+
+        .glow-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--primary-glow) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        .glow-2 {
+            top: 30%;
+            right: -10%;
+            width: 45vw;
+            height: 45vw;
+            background: radial-gradient(circle, var(--accent-glow) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        .glow-3 {
+            bottom: 10%;
+            left: 10%;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, var(--primary-glow) 0%, rgba(0,0,0,0) 70%);
+        }
+
+        /* Layout Container */
+        .wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 0;
+            position: relative;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 2.2rem;
+            height: 2.2rem;
+            background: var(--grad-primary);
+            border-radius: 0.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .theme-toggle-btn {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.8rem 1.8rem;
+            background: var(--grad-primary);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 10px 20px -10px var(--primary-glow);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            box-shadow: none;
+            color: var(--text-main);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+            padding: 4rem 0;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #ffffff 40%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        [data-theme="light"] .hero-title {
+            background: linear-gradient(to right, #0f172a 40%, #475569 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-title span {
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 620px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Mockup Devices / Phone Simulation */
+        .hero-mockup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .phone-frame {
+            width: 320px;
+            height: 640px;
+            background: var(--phone-bezel);
+            border: 12px solid var(--phone-bezel);
+            border-radius: 40px;
+            box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6), 0 0 40px var(--primary-glow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Notch / Dynamic Island */
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 22px;
+            background: #000000;
+            border-radius: 20px;
+            z-index: 1000;
+        }
+
+        .phone-screen {
+            flex: 1;
+            padding: 1.5rem 1rem;
+            background: var(--phone-screen-bg);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+            scrollbar-width: none; /* Hide scrollbar for aesthetics */
+        }
+        .phone-screen::-webkit-scrollbar {
+            display: none;
+        }
+
+        .phone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            padding-top: 0.5rem;
+        }
+
+        .phone-status-icons {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        /* Interactive Phone UI Pages */
+        .phone-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-page {
+            display: none;
+            flex-direction: column;
+            animation: phoneFadeIn 0.4s forwards;
+        }
+
+        .phone-page.active {
+            display: flex;
+        }
+
+        @keyframes phoneFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Phone Screen - HOME VIEW */
+        .mockup-app-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.25rem;
+        }
+        .mockup-app-subtitle {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .mockup-balance-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .mockup-balance-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            text-align: center;
+        }
+        .mockup-balance-title {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+        .mockup-balance-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-top: 0.2rem;
+        }
+
+        .mockup-ocr-selector-box {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .mockup-ocr-select-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .mockup-ocr-engine-row {
+            display: flex;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 0.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .mockup-ocr-engine-tab {
+            flex: 1;
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 0.3rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .mockup-ocr-engine-tab.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .mockup-upload-box {
+            border: 1px dashed rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            height: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 0.75rem;
+        }
+        .mockup-upload-box:hover {
+            border-color: var(--accent);
+            color: var(--text-main);
+        }
+        .mockup-upload-box i {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+
+        .mockup-action-btn {
+            background: var(--grad-primary);
+            color: white;
+            text-align: center;
+            padding: 0.6rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        /* Phone Screen - TOOLS VIEW */
+        .mockup-section-header {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+        .mockup-tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        .mockup-tool-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 0.8rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mockup-tool-card:hover {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.05);
+        }
+        .mockup-tool-card i {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+        .mockup-tool-card span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        /* Phone Screen - HISTORY VIEW */
+        .mockup-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .mockup-history-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .mockup-history-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .mockup-history-info i {
+            color: #ef4444; /* red icon for PDF */
+            font-size: 1.1rem;
+        }
+        .mockup-history-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .mockup-history-time {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+        .mockup-history-actions {
+            display: flex;
+            gap: 0.4rem;
+            font-size: 0.7rem;
+            color: var(--accent);
+        }
+
+        /* Phone Bottom Navigation */
+        .phone-nav-bar {
+            height: 52px;
+            background: var(--surface-color);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 0 -1rem -1.5rem -1rem; /* align correctly */
+            z-index: 100;
+        }
+        .phone-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s, color 0.2s;
+            font-weight: 600;
+        }
+        .phone-nav-item.active {
+            opacity: 1;
+            color: var(--accent);
+        }
+        .phone-nav-item i {
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        /* Interactive OCR Playroom Section */
+        .playroom-section {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .playroom-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 30px 60px -20px var(--card-glow);
+            backdrop-filter: blur(20px);
+        }
+
+        .playroom-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3rem;
+        }
+
+        .playroom-header {
+            margin-bottom: 2rem;
+        }
+
+        .playroom-header h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .playroom-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .selector-row {
+            display: flex;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 0.3rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .selector-item {
+            flex: 1;
+            text-align: center;
+            padding: 0.6rem 0.8rem;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .selector-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px var(--primary-glow);
+        }
+
+        .doc-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .doc-picker-item {
+            border: 1px solid var(--border-color);
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 0.75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .doc-picker-item.active {
+            border-color: var(--accent);
+            background: rgba(6, 182, 212, 0.05);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .doc-picker-item i {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .doc-picker-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .opencv-toggles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        .opencv-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+
+        .opencv-toggle.active {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: var(--accent);
+            color: #ffffff;
+        }
+
+        /* Playroom Viewer & Output */
+        .playroom-viewer {
+            display: flex;
+            flex-direction: column;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            height: 100%;
+            min-height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .viewer-header {
+            padding: 0.75rem 1.25rem;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .viewer-content {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            padding: 1rem;
+            min-height: 250px;
+        }
+
+        /* Image effects simulator */
+        .viewer-image {
+            max-width: 100%;
+            max-height: 280px;
+            border-radius: 8px;
+            transition: filter 0.5s ease;
+        }
+
+        /* Scanning overlay effect */
+        .scan-bar {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+            box-shadow: 0 0 15px var(--accent);
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .scanning .scan-bar {
+            animation: scanningAnimation 2s infinite ease-in-out;
+            opacity: 1;
+        }
+
+        @keyframes scanningAnimation {
+            0% { top: 10%; }
+            50% { top: 90%; }
+            100% { top: 10%; }
+        }
+
+        /* hOCR Coordinates Grid Simulation */
+        .ocr-grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .scanning-finished.show-grid .ocr-grid-overlay {
+            opacity: 0.85;
+        }
+
+        .ocr-box {
+            position: absolute;
+            border: 1px solid var(--accent);
+            background: rgba(6, 182, 212, 0.08);
+            font-family: monospace;
+            font-size: 8px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .ocr-box:hover {
+            background: rgba(6, 182, 212, 0.3);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .playroom-output-box {
+            display: none;
+            padding: 1.25rem;
+            background: rgba(0,0,0,0.5);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .playroom-output-box textarea {
+            width: 100%;
+            height: 120px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            padding: 0.75rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            resize: none;
+            margin-bottom: 0.75rem;
+        }
+        .playroom-output-box textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .playroom-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .playroom-actions button {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .playroom-actions .btn-copy {
+            background: var(--surface-color);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+        .playroom-actions .btn-copy:hover {
+            border-color: var(--accent);
+        }
+
+        .playroom-actions .btn-pdf {
+            background: var(--grad-primary);
+            color: white;
+        }
+        .playroom-actions .btn-pdf:hover {
+            opacity: 0.9;
+        }
+
+        /* Processing spinner Overlay */
+        .processing-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-left-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .processing-status {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--grad-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 4rem auto;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px -15px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(79, 70, 229, 0.3);
+            box-shadow: 0 20px 40px -15px var(--card-glow);
+        }
+
+        .feature-icon {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: rgba(79, 70, 229, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-name {
+            font-size: 1.35rem;
+            margin-bottom: 0.75rem;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Dual OCR Comparison Table Section */
+        .comparison-section {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .comparison-table-wrapper {
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.2);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        td:first-child, th:first-child {
+            font-weight: 700;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-main);
+            width: 25%;
+        }
+
+        td {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-local {
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .badge-cloud {
+            background: rgba(79, 70, 229, 0.15);
+            color: #a5b4fc;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* How it works */
+        .how-it-works {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            position: relative;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-num {
+            width: 3.5rem;
+            height: 3.5rem;
+            background: var(--grad-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: white;
+            margin: 0 auto 1.5rem auto;
+            box-shadow: 0 0 20px var(--primary-glow);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .step h3 {
+            font-size: 1.35rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-muted);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+            .hero-subtitle {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .hero-buttons {
+                justify-content: center;
+            }
+            .playroom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-links {
+                justify-content: center;
+            }
+            th, td {
+                padding: 1rem;
+            }
+            td:first-child, th:first-child {
+                width: 35%;
+            }
+        }
+    </style>
+</head>
+<body data-theme="starry">
+
+    <!-- Starry Background (Shown in Starry mode) -->
+    <div class="stars-container" id="stars"></div>
+
+    <div class="bg-glows">
+        <div class="glow-circle glow-1"></div>
+        <div class="glow-circle glow-2"></div>
+        <div class="glow-circle glow-3"></div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Header -->
+        <header>
+            <a href="#" class="logo">
+                <div class="logo-icon">A</div>
+                All2Pdf &amp; OCR Pro
+            </a>
+            <div class="nav-actions">
+                <button class="theme-toggle-btn" id="theme-toggle" onclick="cycleTheme()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    Theme: Starry
+                </button>
+                <a href="#playroom" class="btn btn-secondary">Try Web Demo</a>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div>
+                <div class="hero-badge">
+                    <div class="hero-badge-dot"></div>
+                    Targeted for Android 15 &amp; 16 (Compose Native)
+                </div>
+                <h1 class="hero-title">Universal Converter &amp; <span>Dual OCR</span> Scanner</h1>
+                <p class="hero-subtitle">
+                    Transform your physical documents, handwriting, and photos into searchable, high-fidelity PDFs. Run 100% locally offline for private scans, or use high-precision Cloud OCR for multilingual &amp; handwritten text.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://play.google.com/store" class="btn">
+                        <i class="fa-brands fa-google-play"></i>
+                        Get on Google Play
+                    </a>
+                    <a href="#features" class="btn btn-secondary">Explore Features</a>
+                </div>
+            </div>
+
+            <!-- Phone Simulator -->
+            <div class="hero-mockup">
+                <div class="phone-frame">
+                    <div class="phone-screen">
+                        
+                        <!-- System Bar -->
+                        <div class="phone-header">
+                            <span id="phone-time">10:48 AM</span>
+                            <div class="phone-status-icons">
+                                <i class="fa-solid fa-wifi"></i>
+                                <i class="fa-solid fa-battery-three-quarters"></i>
+                            </div>
+                        </div>
+
+                        <!-- App Content Container -->
+                        <div class="phone-content">
+                            
+                            <!-- PAGE 1: HOME -->
+                            <div class="phone-page active" id="page-home">
+                                <div class="mockup-app-title">All2Pdf &amp; OCR Pro</div>
+                                <div class="mockup-app-subtitle">Profesionalni Alat za Konverziju</div>
+
+                                <div class="mockup-balance-container">
+                                    <div class="mockup-balance-card">
+                                        <div class="mockup-balance-title">Local Credits</div>
+                                        <div class="mockup-balance-value" style="color: var(--accent);">💎 Unlimited</div>
+                                    </div>
+                                    <div class="mockup-balance-card">
+                                        <div class="mockup-balance-title">Cloud Credits</div>
+                                        <div class="mockup-balance-value" style="color: var(--primary);">🛡️ 15 API</div>
+                                    </div>
+                                </div>
+
+                                <div class="mockup-ocr-selector-box">
+                                    <div class="mockup-ocr-select-title">Quick OCR Scanner</div>
+                                    <div class="mockup-ocr-engine-row">
+                                        <div class="mockup-ocr-engine-tab selected" id="mockup-tab-local" onclick="selectMockupEngine('local')">Local Engine</div>
+                                        <div class="mockup-ocr-engine-tab" id="mockup-tab-cloud" onclick="selectMockupEngine('cloud')">Cloud Engine</div>
+                                    </div>
+                                    <div style="font-size: 0.65rem; color: var(--text-muted); margin-bottom: 0.5rem; text-align: center;" id="mockup-engine-desc">
+                                        Uses on-device ML Models &amp; Tesseract offline.
+                                    </div>
+                                    <div class="mockup-upload-box" onclick="triggerMockupOCR()">
+                                        <i class="fa-solid fa-camera"></i>
+                                        <span>Tap to Capture Document</span>
+                                    </div>
+                                    <div class="mockup-action-btn" onclick="triggerMockupOCR()">
+                                        Run OCR Extraction
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PAGE 2: TOOLS -->
+                            <div class="phone-page" id="page-tools">
+                                <div class="mockup-section-header">Advanced PDF Tools</div>
+                                <div class="mockup-tools-grid">
+                                    <div class="mockup-tool-card" onclick="alert('Phone Simulator: Opening Universal File Converter')">
+                                        <i class="fa-solid fa-file-pdf"></i>
+                                        <span>PDF Converter</span>
+                                    </div>
+                                    <div class="mockup-tool-card" onclick="alert('Phone Simulator: Opening PDF Merger')">
+                                        <i class="fa-solid fa-file-export"></i>
+                                        <span>Merge PDF</span>
+                                    </div>
+                                    <div class="mockup-tool-card" onclick="alert('Phone Simulator: Opening Batch OCR Engine')">
+                                        <i class="fa-solid fa-layer-group"></i>
+                                        <span>Batch Process</span>
+                                    </div>
+                                    <div class="mockup-tool-card" onclick="alert('Phone Simulator: Opening PDF Viewer')">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <span>PDF Viewer</span>
+                                    </div>
+                                    <div class="mockup-tool-card" onclick="alert('Phone Simulator: Opening Cryptographic Digital Signature')">
+                                        <i class="fa-solid fa-signature"></i>
+                                        <span>Sign PDF (.p12)</span>
+                                    </div>
+                                    <div class="mockup-tool-card" onclick="alert('Phone Simulator: Opening Password Protection')">
+                                        <i class="fa-solid fa-lock"></i>
+                                        <span>Protect PDF</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PAGE 3: HISTORY -->
+                            <div class="phone-page" id="page-history">
+                                <div class="mockup-section-header">Nedavna Aktivnost</div>
+                                <div class="mockup-history-list">
+                                    <div class="mockup-history-card">
+                                        <div class="mockup-history-info">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <div>
+                                                <div class="mockup-history-name">Invoice_931.pdf</div>
+                                                <div class="mockup-history-time">Just now · Local</div>
+                                            </div>
+                                        </div>
+                                        <div class="mockup-history-actions">
+                                            <i class="fa-solid fa-share-nodes" title="Share"></i>
+                                        </div>
+                                    </div>
+                                    <div class="mockup-history-card">
+                                        <div class="mockup-history-info">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <div>
+                                                <div class="mockup-history-name">HandwrittenNote_OCR.pdf</div>
+                                                <div class="mockup-history-time">2 hours ago · Cloud</div>
+                                            </div>
+                                        </div>
+                                        <div class="mockup-history-actions">
+                                            <i class="fa-solid fa-share-nodes"></i>
+                                        </div>
+                                    </div>
+                                    <div class="mockup-history-card">
+                                        <div class="mockup-history-info">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                            <div>
+                                                <div class="mockup-history-name">Signed_Agreement.pdf</div>
+                                                <div class="mockup-history-time">Yesterday · Signed</div>
+                                            </div>
+                                        </div>
+                                        <div class="mockup-history-actions">
+                                            <i class="fa-solid fa-share-nodes"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- App Navigation Bar -->
+                        <div class="phone-nav-bar">
+                            <div class="phone-nav-item active" id="nav-item-home" onclick="changeMockupTab('home')">
+                                <i class="fa-solid fa-house"></i>
+                                <span>Home</span>
+                            </div>
+                            <div class="phone-nav-item" id="nav-item-tools" onclick="changeMockupTab('tools')">
+                                <i class="fa-solid fa-toolbox"></i>
+                                <span>Tools</span>
+                            </div>
+                            <div class="phone-nav-item" id="nav-item-history" onclick="changeMockupTab('history')">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <span>History</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive OCR Playroom Section -->
+        <section id="playroom" class="playroom-section">
+            <div class="playroom-card">
+                <div class="playroom-header">
+                    <h3>Interactive OCR &amp; Preprocessing Sandbox</h3>
+                    <p style="color: var(--text-muted);">Select a document type, choose your engine and settings, then watch the OCR pipeline process the document in real time.</p>
+                </div>
+
+                <div class="playroom-grid">
+                    <!-- Left: Controls -->
+                    <div class="playroom-controls">
+                        
+                        <div class="control-group">
+                            <span class="control-label">1. Choose Document Source</span>
+                            <div class="doc-picker-grid">
+                                <div class="doc-picker-item active" id="doc-invoice" onclick="selectDemoDoc('invoice')">
+                                    <i class="fa-solid fa-receipt"></i>
+                                    <span class="doc-picker-name">Printed Invoice</span>
+                                </div>
+                                <div class="doc-picker-item" id="doc-handwritten" onclick="selectDemoDoc('handwritten')">
+                                    <i class="fa-solid fa-pen-fancy"></i>
+                                    <span class="doc-picker-name">Handwritten Note</span>
+                                </div>
+                                <div class="doc-picker-item" id="doc-curved" onclick="selectDemoDoc('curved')">
+                                    <i class="fa-solid fa-book-open"></i>
+                                    <span class="doc-picker-name">Curved Page</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <span class="control-label">2. OCR Engine Mode</span>
+                            <div class="selector-row">
+                                <div class="selector-item active" id="engine-local" onclick="selectOcrEngine('local')">
+                                    Local OCR (Offline)
+                                </div>
+                                <div class="selector-item" id="engine-cloud" onclick="selectOcrEngine('cloud')">
+                                    Cloud OCR (Google Vision API)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <span class="control-label">3. Target Language</span>
+                            <div class="selector-row" style="background: rgba(0,0,0,0.15)">
+                                <select id="playroom-lang" style="width: 100%; padding: 0.5rem; background: transparent; border: none; color: var(--text-main); font-weight: 600; font-family: inherit; font-size: 0.9rem;">
+                                    <option value="eng" style="background: var(--bg-color)">English (ML Kit Local)</option>
+                                    <option value="srp" style="background: var(--bg-color)">Srpski / Serbian Cyrillic (Tesseract Local)</option>
+                                    <option value="deu" style="background: var(--bg-color)">German / Deutsch</option>
+                                    <option value="fra" style="background: var(--bg-color)">French / Français</option>
+                                    <option value="rus" style="background: var(--bg-color)">Russian / Русский</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <span class="control-label">4. OpenCV Real-time Filters</span>
+                            <div class="opencv-toggles-grid">
+                                <div class="opencv-toggle active" id="filter-deskew" onclick="toggleFilter('deskew')">
+                                    <i class="fa-solid fa-rotate-right"></i>
+                                    Deskew
+                                </div>
+                                <div class="opencv-toggle active" id="filter-shadows" onclick="toggleFilter('shadows')">
+                                    <i class="fa-solid fa-sun"></i>
+                                    Remove Shadows
+                                </div>
+                                <div class="opencv-toggle active" id="filter-dewarp" onclick="toggleFilter('dewarp')">
+                                    <i class="fa-solid fa-wave-square"></i>
+                                    Page Dewarp
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn" style="margin-top: 1rem;" onclick="runOcrSandbox()">
+                            <i class="fa-solid fa-microchip"></i>
+                            Run OCR Sandbox
+                        </button>
+                    </div>
+
+                    <!-- Right: Live Visuals & Outputs -->
+                    <div class="playroom-viewer" id="sandbox-viewer">
+                        <div class="viewer-header">
+                            <span>SCANNER PREVIEW</span>
+                            <span id="scanner-engine-badge" class="badge-local">Engine: Local</span>
+                        </div>
+
+                        <div class="viewer-content" id="viewer-container">
+                            <div class="scan-bar"></div>
+                            
+                            <!-- Simulated Coordinate Box Overlays -->
+                            <div class="ocr-grid-overlay" id="ocr-grid">
+                                <!-- Will be populated by JS -->
+                            </div>
+
+                            <!-- Image Container -->
+                            <div id="image-overlay-container" style="position: relative;">
+                                <img src="" id="source-image" class="viewer-image" alt="Document to Scan">
+                            </div>
+
+                            <!-- Processing Overlay -->
+                            <div class="processing-overlay" id="processing-screen">
+                                <div class="spinner"></div>
+                                <div class="processing-status" id="processing-msg">Učitavanje slike...</div>
+                            </div>
+                        </div>
+
+                        <!-- Extracted text area -->
+                        <div class="playroom-output-box" id="output-box">
+                            <span class="control-label" style="display: block; margin-bottom: 0.5rem; font-size: 0.75rem;">Extracted OCR Text:</span>
+                            <textarea id="playroom-text-out" readonly></textarea>
+                            <div class="playroom-actions">
+                                <button class="btn-copy" onclick="copySandboxText()">
+                                    <i class="fa-solid fa-copy"></i> Copy Text
+                                </button>
+                                <button class="btn-pdf" onclick="downloadSandboxPdf()">
+                                    <i class="fa-solid fa-file-arrow-down"></i> Searchable PDF
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <h2 class="section-title">Core Application Capabilities</h2>
+            <p class="section-subtitle">A state-of-the-art suite designed for modern, high-speed document workflow on Android devices.</p>
+
+            <div class="features-grid">
+                <!-- Card 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <h3 class="feature-name">Dual OCR Engine</h3>
+                    <p class="feature-desc">Utilize standard local on-device ML Models &amp; Tesseract 4 (for Cyrillic) for 100% offline private processing. Switch to Google Cloud Vision API for ultra-high accuracy and handwritten script recognition.</p>
+                </div>
+                <!-- Card 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-bezier-curve"></i>
+                    </div>
+                    <h3 class="feature-name">Page Flattening (Dewarp)</h3>
+                    <p class="feature-desc">Integrated OpenCV analytical algorithms automatically flatten warped books, straighten lines, and align margins to output perfectly straight, planar documents.</p>
+                </div>
+                <!-- Card 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-file-word"></i>
+                    </div>
+                    <h3 class="feature-name">Universal PDF Converter</h3>
+                    <p class="feature-desc">Convert over 100+ documents (DOCX, XLSX, PPTX, HTML, TXT, and major images) into standardized PDF documents powered by local layout and Cloudmersive engines.</p>
+                </div>
+                <!-- Card 4 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-signature"></i>
+                    </div>
+                    <h3 class="feature-name">Digital Signatures (.p12)</h3>
+                    <p class="feature-desc">Secure and authorize your corporate documents. Cryptographically sign export PDFs using professional personal digital certificates (.p12 keyfiles) and password protection.</p>
+                </div>
+                <!-- Card 5 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <h3 class="feature-name">PDF Protection &amp; Encryption</h3>
+                    <p class="feature-desc">Apply robust password policies and industry-standard encryption directly to your documents prior to export, keeping your corporate assets secured.</p>
+                </div>
+                <!-- Card 6 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <h3 class="feature-name">Searchable PDF Layers</h3>
+                    <p class="feature-desc">Rather than plain text exports, compile Searchable PDFs (PDF/A). Imprints an invisible coordinates-mapped text layer exactly on top of the original document, allowing easy copy/search.</p>
+                </div>
+                <!-- Card 7 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                    <h3 class="feature-name">High-Speed Batch Engine</h3>
+                    <p class="feature-desc">Process multiple images or pages consecutively. Our batch OCR scanner handles layout pipelines asynchronously, compiling multiple processed pages into a single, cohesive document.</p>
+                </div>
+                <!-- Card 8 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <h3 class="feature-name">Balanced Token System</h3>
+                    <p class="feature-desc">Use on-device local tasks completely free and unlimited. Watch short rewarded video advertisements integrated via Google AdMob or buy credit packs to earn tokens for cloud integrations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Engine Comparison Section -->
+        <section class="comparison-section">
+            <h2 class="section-title">Engine Comparison</h2>
+            <p class="section-subtitle">Choose the perfect OCR engine mode for your specific document task.</p>
+
+            <div class="comparison-table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Capability</th>
+                            <th>Local OCR Engine</th>
+                            <th>Cloud OCR Engine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Internet Dependency</td>
+                            <td><span class="badge-local">100% Offline</span></td>
+                            <td><span class="badge-cloud">Requires Internet</span></td>
+                        </tr>
+                        <tr>
+                            <td>Privacy &amp; Data Security</td>
+                            <td>Processed completely on-device CPU. Maximum privacy.</td>
+                            <td>Google Cloud API endpoints. Secure transit.</td>
+                        </tr>
+                        <tr>
+                            <td>Accuracy</td>
+                            <td>Very high for standard printed texts.</td>
+                            <td>Industrial-grade. Deep Neural Net accuracy.</td>
+                        </tr>
+                        <tr>
+                            <td>Handwritten Text</td>
+                            <td>Basic recognition (unsuitable for cursive script).</td>
+                            <td>Excellent handwritten recognition.</td>
+                        </tr>
+                        <tr>
+                            <td>Cyrillic Script Support</td>
+                            <td>Yes (Powered by Serbian Cyrillic Tesseract models).</td>
+                            <td>Yes (Fully supported natively).</td>
+                        </tr>
+                        <tr>
+                            <td>Credit Charge</td>
+                            <td>Free (Does not charge credits).</td>
+                            <td>1 API Credit per page.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="how-it-works">
+            <h2 class="section-title">How the App Works</h2>
+            <p class="section-subtitle">A simple, 3-step pipeline converting your raw captures into neat searchable documents.</p>
+
+            <div class="steps-grid">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>Scan or Import</h3>
+                    <p class="feature-desc" style="margin-top: 0.5rem;">Take a photo using the guided CameraX screen or select a document/image from your device storage.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>Enhance &amp; Dewarper</h3>
+                    <p class="feature-desc" style="margin-top: 0.5rem;">Our local OpenCV filters detect page margins, straightens text lines, and normalizes coordinates automatically.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>Export &amp; Share</h3>
+                    <p class="feature-desc" style="margin-top: 0.5rem;">Recognized text blocks are reconstructed into standard layout PDF documents, signed, encrypted, or copied instantly.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="wrapper">
+            <div class="footer-content">
+                <a href="#" class="footer-logo">
+                    <div class="logo-icon" style="box-shadow: none;">A</div>
+                    All2Pdf &amp; OCR Pro
+                </a>
+                <div class="footer-links">
+                    <a href="https://vrvlada.github.io/privacy-policy.html" target="_blank">Privacy Policy</a>
+                    <a href="https://vrvlada.github.io/app-ads.txt" target="_blank">app-ads.txt Verified</a>
+                    <a href="mailto:support@scanempire.com">Support Email</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2026 ScanEmpire. All rights reserved. Powered by Compose Native, OpenCV &amp; Tesseract.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JS Scripts -->
+    <script>
+        // Generated Demo Files Base64 Mock / Image URLs for Sandbox
+        const demoDocs = {
+            invoice: {
+                url: 'https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?q=80&w=600&auto=format&fit=crop',
+                textLocal: 'INVOICE #INV-2026-042\nDate: June 15, 2026\nDue Date: July 15, 2026\n\nITEMS DESCRIPTION\tQTY\tPRICE\tTOTAL\nPremium App Subscription\t1\t$9.99\t$9.99\nCloud Credits Recharge\t100\t$4.99\t$4.99\n\nSUBTOTAL:\t$14.98\nTAX (8%):\t$1.20\nTOTAL DUE:\t$16.18\n\nThank you for choosing All2Pdf & OCR Pro!',
+                textCloud: 'INVOICE #INV-2026-042\nDate: June 15, 2026\nDue Date: July 15, 2026\n\nITEMS DESCRIPTION\tQTY\tPRICE\tTOTAL\nPremium App Subscription\t1\t$9.99\t$9.99\nCloud Credits Recharge\t100\t$4.99\t$4.99\n\nSUBTOTAL:\t$14.98\nTAX (8%):\t$1.20\nTOTAL DUE:\t$16.18\n\nThank you for choosing All2Pdf & OCR Pro!',
+                boxes: [
+                    {x: 10, y: 15, w: 22, h: 4, text: "INVOICE"},
+                    {x: 10, y: 22, w: 26, h: 3, text: "#INV-2026-042"},
+                    {x: 65, y: 15, w: 25, h: 3, text: "Date: 15/06/2026"},
+                    {x: 10, y: 35, w: 80, h: 25, text: "[Invoice details grid]"},
+                    {x: 70, y: 70, w: 20, h: 5, text: "TOTAL: $16.18"}
+                ]
+            },
+            handwritten: {
+                url: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=600&auto=format&fit=crop',
+                textLocal: '7h15 i5 4 h4ndwritt3n n0t3\nwhich 15 hard t0 r3ad\nf0r l0cal OCR models...\n50m3 w0rd5 ar3 m1551ng',
+                textCloud: 'This is a handwritten note\nwhich is hard to read\nfor local OCR models.\nGoogle Cloud Vision Engine\nextracts this with 99.8% accuracy\nincluding complex symbols & cursive writing!',
+                boxes: [
+                    {x: 15, y: 15, w: 35, h: 6, text: "This is a"},
+                    {x: 15, y: 23, w: 45, h: 7, text: "handwritten note"},
+                    {x: 15, y: 35, w: 32, h: 6, text: "which is hard"},
+                    {x: 15, y: 45, w: 55, h: 8, text: "for local OCR models."}
+                ]
+            },
+            curved: {
+                url: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop',
+                textLocal: 'd e w a r p e d   p a g e\nCHAPTER IV\n- - - - - -\nThis text was originally curved\ndue to book bindings.\nOpenCV analytical dewarping\nflattened the image context.',
+                textCloud: 'DEWARPED BOOK PAGE\nCHAPTER IV\n- - - - - -\nThis text was originally curved\ndue to book bindings.\nOpenCV analytical dewarping\nflattened the image context.',
+                boxes: [
+                    {x: 30, y: 10, w: 40, h: 4, text: "CHAPTER IV"},
+                    {x: 10, y: 22, w: 80, h: 5, text: "This text was originally curved"},
+                    {x: 10, y: 30, w: 80, h: 5, text: "due to book bindings page curvature."},
+                    {x: 10, y: 40, w: 80, h: 5, text: "OpenCV analytical dewarping flattened"},
+                    {x: 10, y: 48, w: 80, h: 5, text: "the image context for perfect alignment."}
+                ]
+            }
+        };
+
+        let selectedDoc = 'invoice';
+        let selectedEngine = 'local';
+        let activeFilters = {
+            deskew: true,
+            shadows: true,
+            dewarp: true
+        };
+
+        // Initialize Sandbox State
+        document.addEventListener('DOMContentLoaded', () => {
+            selectDemoDoc('invoice');
+            
+            // Sync current clock in mockup phone
+            setInterval(() => {
+                const now = new Date();
+                let hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12; // 0 should be 12
+                document.getElementById('phone-time').innerText = `${hours}:${minutes} ${ampm}`;
+            }, 1000);
+        });
+
+        // 1. Theme Controller (Cycle: Dark -> Light -> Starry)
+        function cycleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            let nextTheme = 'light';
+            let label = 'Theme: Light';
+
+            if (currentTheme === 'light') {
+                nextTheme = 'dark';
+                label = 'Theme: Dark';
+            } else if (currentTheme === 'dark') {
+                nextTheme = 'starry';
+                label = 'Theme: Starry';
+            }
+            
+            document.body.setAttribute('data-theme', nextTheme);
+            const button = document.getElementById('theme-toggle');
+            
+            if (nextTheme === 'starry') {
+                button.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Theme: Starry';
+            } else if (nextTheme === 'dark') {
+                button.innerHTML = '<i class="fa-solid fa-moon"></i> Theme: Dark';
+            } else {
+                button.innerHTML = '<i class="fa-solid fa-sun"></i> Theme: Light';
+            }
+            
+            if (nextTheme === 'starry') {
+                generateStars();
+            }
+        }
+
+        // Generating random twinkling stars for starry background
+        function generateStars() {
+            const container = document.getElementById('stars');
+            container.innerHTML = '';
+            const numStars = 60;
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(star);
+            }
+        }
+        generateStars(); // Build initial set
+
+        // 2. Interactive Phone Mockup Tab switcher
+        function changeMockupTab(tabId) {
+            // Remove active classes
+            document.querySelectorAll('.phone-nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.phone-page').forEach(page => page.classList.remove('active'));
+
+            // Set active
+            document.getElementById(`nav-item-${tabId}`).classList.add('active');
+            document.getElementById(`page-${tabId}`).classList.add('active');
+        }
+
+        // Select mockup engine
+        function selectMockupEngine(engineType) {
+            document.getElementById('mockup-tab-local').classList.remove('selected');
+            document.getElementById('mockup-tab-cloud').classList.remove('selected');
+            
+            const btn = document.getElementById(`mockup-tab-${engineType}`);
+            btn.classList.add('selected');
+
+            const desc = document.getElementById('mockup-engine-desc');
+            if (engineType === 'local') {
+                desc.innerText = "Uses on-device ML Models & Tesseract offline.";
+            } else {
+                desc.innerText = "Uses Google Cloud Vision API (Charges 1 API Credit).";
+            }
+        }
+
+        function triggerMockupOCR() {
+            changeMockupTab('history');
+            alert('Phone Simulator: Starting OCR scan. Processed document added to Recent Activity!');
+        }
+
+        // 3. Sandbox Playroom Controllers
+        function selectDemoDoc(docId) {
+            selectedDoc = docId;
+            document.querySelectorAll('.doc-picker-item').forEach(item => item.classList.remove('active'));
+            document.getElementById(`doc-${docId}`).classList.add('active');
+            
+            // Set image preview source
+            const imgEl = document.getElementById('source-image');
+            imgEl.src = demoDocs[docId].url;
+            
+            // Hide grid overlays & output box on document switch
+            document.getElementById('output-box').style.display = 'none';
+            document.getElementById('ocr-grid').innerHTML = '';
+            document.getElementById('sandbox-viewer').classList.remove('scanning-finished');
+            document.getElementById('sandbox-viewer').classList.remove('show-grid');
+            
+            // Reset image filters to default
+            applyViewerFilters();
+        }
+
+        function selectOcrEngine(engineType) {
+            selectedEngine = engineType;
+            document.getElementById('engine-local').classList.remove('active');
+            document.getElementById('engine-cloud').classList.remove('active');
+            document.getElementById(`engine-${engineType}`).classList.add('active');
+            
+            const badge = document.getElementById('scanner-engine-badge');
+            if (engineType === 'local') {
+                badge.innerText = 'Engine: Local';
+                badge.className = 'badge-local';
+            } else {
+                badge.innerText = 'Engine: Cloud';
+                badge.className = 'badge-cloud';
+            }
+        }
+
+        function toggleFilter(filterId) {
+            activeFilters[filterId] = !activeFilters[filterId];
+            const filterBtn = document.getElementById(`filter-${filterId}`);
+            if (activeFilters[filterId]) {
+                filterBtn.classList.add('active');
+            } else {
+                filterBtn.classList.remove('active');
+            }
+            
+            // Live apply filters visually
+            applyViewerFilters();
+        }
+
+        function applyViewerFilters() {
+            const img = document.getElementById('source-image');
+            let filterStr = "";
+            
+            if (activeFilters.shadows) {
+                filterStr += "contrast(1.15) brightness(1.05) ";
+            }
+            if (activeFilters.dewarp && selectedDoc === 'curved') {
+                // visually represent dewarp with scale and skew removal simulation
+                filterStr += "saturate(0.9) ";
+            }
+            
+            img.style.filter = filterStr;
+        }
+
+        // Run OCR sandbox pipeline animation and results
+        function runOcrSandbox() {
+            const processingOverlay = document.getElementById('processing-screen');
+            const statusMsg = document.getElementById('processing-msg');
+            const outputBox = document.getElementById('output-box');
+            const outputTextarea = document.getElementById('playroom-text-out');
+            const gridOverlay = document.getElementById('ocr-grid');
+            const viewer = document.getElementById('sandbox-viewer');
+            
+            processingOverlay.style.display = 'flex';
+            outputBox.style.display = 'none';
+            viewer.classList.remove('scanning-finished', 'show-grid', 'scanning');
+            gridOverlay.innerHTML = '';
+            
+            // Step-by-step logs simulating Android app
+            const steps = [
+                { time: 0, text: "Učitavanje slike..." },
+                { time: 500, text: activeFilters.deskew ? "OpenCV: Ispravljanje rotacije (Deskew)..." : "Preskakanje ispravljanja rotacije..." },
+                { time: 1000, text: activeFilters.dewarp ? "OpenCV: Uklanjanje krivina (Page Dewarp)..." : "Preskakanje uklanjanja krivina..." },
+                { time: 1500, text: activeFilters.shadows ? "OpenCV: Uklanjanje senki i normalizacija..." : "Povećanje kontrasta..." },
+                { time: 2000, text: selectedEngine === 'local' ? "Lokalno prepoznavanje: Inicijalizacija OCR..." : "Google Cloud: Slanje bezbednog paketa na API..." },
+                { time: 2500, text: "Prepoznavanje teksta: 40%..." },
+                { time: 3000, text: "Prepoznavanje teksta: 100%..." },
+                { time: 3400, text: "Gotovo!" }
+            ];
+
+            // Add scanning animation line during processing
+            setTimeout(() => {
+                viewer.classList.add('scanning');
+            }, 200);
+
+            steps.forEach(step => {
+                setTimeout(() => {
+                    statusMsg.innerText = step.text;
+                }, step.time);
+            });
+
+            // Finished processing
+            setTimeout(() => {
+                processingOverlay.style.display = 'none';
+                viewer.classList.remove('scanning');
+                viewer.classList.add('scanning-finished');
+                
+                // Show output text based on engine
+                const docData = demoDocs[selectedDoc];
+                outputTextarea.value = selectedEngine === 'local' ? docData.textLocal : docData.textCloud;
+                outputBox.style.display = 'block';
+
+                // Generate simulated OCR bounding boxes overlay (Layout Reconstruction/Hybrid Overlay)
+                generateOcrBoundingBoxes(docData.boxes);
+                viewer.classList.add('show-grid');
+                
+            }, 3600);
+        }
+
+        function generateOcrBoundingBoxes(boxes) {
+            const container = document.getElementById('ocr-grid');
+            container.innerHTML = '';
+            
+            boxes.forEach(box => {
+                const boxEl = document.createElement('div');
+                boxEl.className = 'ocr-box';
+                boxEl.style.left = box.x + '%';
+                boxEl.style.top = box.y + '%';
+                boxEl.style.width = box.w + '%';
+                boxEl.style.height = box.h + '%';
+                boxEl.title = `Text: "${box.text}"`;
+                boxEl.innerText = box.text.substring(0, 10);
+                
+                boxEl.onclick = () => {
+                    alert(`Recognized text at this layout coordinate: "${box.text}"`);
+                };
+                
+                container.appendChild(boxEl);
+            });
+        }
+
+        function copySandboxText() {
+            const text = document.getElementById('playroom-text-out').value;
+            navigator.clipboard.writeText(text);
+            alert('Sandbox text copied to clipboard!');
+        }
+
+        function downloadSandboxPdf() {
+            alert('Sandbox Action: Reconstructing layout grid into standard Searchable PDF (PDF/A) with hidden OCR layer. Download starting...');
+        }
+    </script>
+</body>
+</html>
